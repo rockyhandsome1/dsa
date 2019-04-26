@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 //sll
 struct node
 {
@@ -9,7 +10,7 @@ struct node
 };
 struct node *head = NULL;
 
-void display()
+void insert()
 {
 	struct node *temp,*p;
 	p=head;
@@ -22,31 +23,64 @@ void display()
 	scanf("%d",&value);
 	temp->val = value;
 	strcpy(temp->label, labelname);
+	temp->next=NULL;
 	if(head==NULL)
 	{
 		head=temp;
-		temp->next=NULL;
 	}
 	else
 	{
-		while(p!=NULL)
+		while(p->next!=NULL)
 			p=p->next;
 		p->next=temp;
-		temp->next=NULL;
 	}
 }
 
+void delete()
+{
+	struct node *temp,*p;
+	p=head;
+	int value;
+	char labelname[20];
+	temp = (struct node *)malloc(sizeof(struct node));
+	printf("\nEnter the label name:");
+	scanf("%s",labelname);
+	if(head==NULL)
+	{
+		printf("\nSymtab is empty!\n");
+	}
+	if(strcmp(head->label, labelname)==0)
+	{
+		temp=head;
+		head=head->next;
+	}
+	else
+	{
+		while (p != NULL)
+		       if (strcmp(p->next->label, labelname)==0)
+		       {
+		           printf("deleting label: %s\n", labelname);
+		           temp = p->next;
+
+		           p->next = p->next->next;
+			   break;
+		       }
+	}
+	free(temp);
+}
 void display()
 {
 	struct node *p;
 	p=head;
 	int i=1;
-	while(p!=tail)
+	if(head==NULL)
+		printf("Symtab is empty");
+	else	
+	while(p!=NULL)
 	{
 		printf("\n%d\t%s\t%d\n",i++,p->label,p->val);
 		p=p->next;
 	}
-	printf("\n%d\t%s\t%d\n",i++,p->label,p->val);
 }
 
 void main()
@@ -62,7 +96,7 @@ void main()
 	switch(ch)
 	{
 		case 1:insert();break;
-		//case 2:delete();break;
+		case 2:delete();break;
 		case 3:display();break;
 		case 4:break;
 		default:printf("\nEnter the valid choice..");break;
